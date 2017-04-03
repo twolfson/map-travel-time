@@ -33,7 +33,9 @@
     "test-karma-develop": "nodemon -x \"DISPLAY=\\\"\\\" xvfb-maybe karma start --browsers PhantomJSScreenshot && bin/test-browser-assert-screenshots-signature.sh\"",
     "test-karma-single": "DISPLAY=\"\" xvfb-maybe karma start"
   },
-  "dependencies": {},
+  "dependencies": {
+    "leaflet": "~1.0.3"
+  },
   "devDependencies": {
     "browserify": "~14.1.0",
     "foundry": "~4.3.2",

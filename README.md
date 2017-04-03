@@ -17,6 +17,8 @@ mapTravelTime(); // 'awesome'
 ## Documentation
 _(Coming soon)_
 
+TODO: Document LiveReload
+
 ## Examples
 _(Coming soon)_
 
