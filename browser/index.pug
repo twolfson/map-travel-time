@@ -5,6 +5,10 @@ html
     link(rel="stylesheet", href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css", text="text/css")
     link(rel="stylesheet", href="/css/index.css", text="text/css")
   body
+    .map
     script(src="/js/index.js")
     script.
-      window.app = new window.Application();
+      window.app = new window.Application({
+        el: document.querySelector('.map'),
+        csvStopData: 'pending'
+      });

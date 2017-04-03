@@ -5,16 +5,13 @@ var L = require('leaflet');
 
 // Define our Application constructor
 function Application(params) {
-  // assert(params.csvStopData);
-
-  // Create our element for Leaflet
-  var mapEl = document.createElement('div');
-  mapEl.className = 'map';
-  document.body.appendChild(mapEl);
+  // Verify we have our parameters
+  assert(params.csvStopData);
+  assert(params.el);
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory
-  var map = L.map(mapEl, {
+  var map = L.map(params.el, {
     center: [51.505, -0.09],
     zoom: 13
   });

@@ -35,8 +35,7 @@
     "test-karma-single": "DISPLAY=\"\" xvfb-maybe karma start"
   },
   "dependencies": {
-    "leaflet": "~1.0.3",
-    "pug": "~2.0.0-beta11"
+    "leaflet": "~1.0.3"
   },
   "devDependencies": {
     "browserify": "~14.1.0",
