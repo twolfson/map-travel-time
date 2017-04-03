@@ -1,6 +1,7 @@
 // Load in our dependencies
 // Based on http://leafletjs.com/examples/quick-start/
 var assert = require('assert');
+var escapeHtml = require('escape-html');
 var Papa = require('papaparse');
 var L = require('leaflet');
 
@@ -18,13 +19,11 @@ function Application(params) {
     console.error('Error encountered', stopResults.errors[0]);
     throw new Error(stopResults.errors[0].message);
   }
-  // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
-  //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}, ...]
   var stopData = stopResults.data;
 
   // Slice our stop data for development
   // TODO: Remove dev edit
-  stopData = stopData.slice(0, 10);
+  // stopData = stopData.slice(0, 10);
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory
@@ -47,6 +46,18 @@ function Application(params) {
 
   // Draw dots for each of our stations
   // TODO: Make stations debuggable so group them in a layer or something
+  stopData.forEach(function generateStopMarker (stopInfo) {
+    // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
+    //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}, ...]
+    // to '2ND ST ... (id: 98, code: 198)'
+    var popupStr = stopInfo.stop_name + ' (id: ' + escapeHtml(stopInfo.stop_id) + ', ' +
+      'code: ' + escapeHtml(stopInfo.stop_code) + ')';
+    L.circleMarker([stopInfo.stop_lat, stopInfo.stop_lon], {
+      stroke: false,
+      fillOpacity: 1.0,
+      radius: 3
+    }).bindPopup(popupStr).addTo(map);
+  });
 
   // When a click occurs
   // TODO: Swap this out with a plugin

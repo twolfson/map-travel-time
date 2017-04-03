@@ -35,6 +35,7 @@
     "test-karma-single": "DISPLAY=\"\" xvfb-maybe karma start"
   },
   "dependencies": {
+    "escape-html": "~1.0.3",
     "leaflet": "~1.0.3",
     "papaparse": "~4.2.0"
   },
