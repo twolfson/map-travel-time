@@ -1,15 +1,12 @@
 // Load in our dependencies
 // Based on http://leafletjs.com/examples/quick-start/
-var fs = require('fs');
+var assert = require('assert');
 var L = require('leaflet');
 
-// Read in our stop data
-// TODO: Relocate data loading into page itself (too bulky to load here)
-var stopCsvData = fs.readFileSync(__dirname + '/../vendor/sfmta-60/stops.txt', 'utf8');
-console.log(stopCsvData);
+// Define our Application constructor
+function Application(params) {
+  // assert(params.csvStopData);
 
-// Define our main function
-function main() {
   // Create our element for Leaflet
   var mapEl = document.createElement('div');
   mapEl.className = 'map';
@@ -56,4 +53,4 @@ function main() {
     lastClickTime = now;
   });
 }
-main();
+window.Application = module.exports = Application;
