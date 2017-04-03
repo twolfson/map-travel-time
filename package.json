@@ -25,6 +25,7 @@
     "develop": "gulp build-clean && gulp develop",
     "lint": "twolfson-style lint browser/ test/",
     "pretest": "rm -r test/browser/actual-screenshots &> /dev/null || true",
+    "start": "serve dist",
     "test": "npm run test-browser && npm run test-server && npm run lint",
     "_test-browser-comment": "We must run `npm build` before `npm run test-karma-single` so CSS is compiled for visibility tests",
     "test-browser": "npm run build && npm run test-karma-single && echo \"TODO: Add screenshot tests\"",
@@ -38,7 +39,6 @@
   },
   "devDependencies": {
     "browserify": "~14.1.0",
-    "express": "~4.15.2",
     "foundry": "~4.3.2",
     "foundry-release-git": "~2.0.2",
     "foundry-release-npm": "~2.0.2",
@@ -59,6 +59,7 @@
     "karma-phantomjs-launcher": "~1.0.4",
     "mocha": "~3.1.2",
     "rimraf": "~2.6.1",
+    "serve": "~1.4.0",
     "twolfson-style": "~1.6.1",
     "underscore": "~1.8.3",
     "vinyl-source-stream": "~1.1.0",
