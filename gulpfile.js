@@ -30,7 +30,11 @@ gulp.task('build-html', function buildCss () {
   // Generate a stream that compiles our Pug as CSS
   // DEV: We return the pipe'd stream so gulp knows when we exit
   var htmlStream = gulp.src('browser/*.pug')
-    .pipe(gulpPug());
+    .pipe(gulpPug({
+      locals: {
+        require: require
+      }
+    }));
 
   // If we are allowing failures, then log them
   // DEV: Desktop notifications are a personal preference

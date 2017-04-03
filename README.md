@@ -18,6 +18,9 @@ mapTravelTime(); // 'awesome'
 _(Coming soon)_
 
 TODO: Document LiveReload
+TODO: Attribute Transit Feeds for GTFS data and OneBus for pointing us in proper direction
+TODO: Add screenshots to tests
+TODO: Add screenshot to README
 
 ## Examples
 _(Coming soon)_

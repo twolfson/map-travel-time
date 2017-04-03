@@ -7,6 +7,8 @@ html
   body
     .map
     script(src="/js/index.js")
+    //- Expose our GTFS data
+    - var fs = require('fs');
     script.
       window.app = new window.Application({
         el: document.querySelector('.map'),
