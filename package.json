@@ -32,12 +32,21 @@
     "foundry-release-git": "~2.0.2",
     "foundry-release-npm": "~2.0.2",
     "gulp": "~3.9.1",
+    "gulp-buffer": "0.0.2",
+    "gulp-csso": "~3.0.0",
     "gulp-livereload": "~3.8.1",
+    "gulp-notify": "~3.0.0",
+    "gulp-sizereport": "~1.2.0",
+    "gulp-sourcemaps": "~2.5.0",
     "gulp-uglify": "~2.1.2",
     "jscs": "~3.0.7",
     "jshint": "~2.9.4",
     "mocha": "~3.1.2",
-    "twolfson-style": "~1.6.1"
+    "rimraf": "~2.6.1",
+    "twolfson-style": "~1.6.1",
+    "underscore": "~1.8.3",
+    "vinyl-source-stream": "~1.1.0",
+    "watchify": "~3.9.0"
   },
   "keywords": [
     "map",
