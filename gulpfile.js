@@ -21,8 +21,8 @@ var config = {
 
 // Define our build tasks
 gulp.task('build-clean', function clean (done) {
-  // Remove all compiled files in `dist/`
-  rimraf(__dirname + '/dist/', done);
+  // Remove all compiled files in `dist`
+  rimraf(__dirname + '/dist', done);
 });
 
 gulp.task('build-css', function buildCss () {

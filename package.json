@@ -21,7 +21,8 @@
   },
   "license": "Unlicense",
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp build-clean && gulp build",
+    "develop": "gulp build-clean && gulp develop",
     "lint": "twolfson-style lint browser/ test/",
     "pretest": "rm -r test/browser/actual-screenshots &> /dev/null || true",
     "test": "npm run test-browser && npm run test-server && npm run lint",
