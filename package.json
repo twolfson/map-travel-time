@@ -21,10 +21,9 @@
   },
   "license": "Unlicense",
   "scripts": {
-    "precheck": "twolfson-style precheck lib/ test/",
+    "build": "gulp build",
     "lint": "twolfson-style lint lib/ test/",
-    "pretest": "twolfson-style install",
-    "test": "npm run precheck && mocha --reporter dot && npm run lint"
+    "test": "mocha --reporter dot && npm run lint"
   },
   "dependencies": {},
   "devDependencies": {
