@@ -6,7 +6,7 @@ var L = require('leaflet');
 function main() {
   // Create our element for Leaflet
   var mapEl = document.createElement('div');
-  mapEl.setAttribute('id', 'map');
+  mapEl.className = 'map';
   document.body.appendChild(mapEl);
 
   // Bind Leaflet to our element

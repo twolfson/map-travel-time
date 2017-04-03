@@ -1,4 +1,8 @@
 /* Define our CSS */
+body {
+  margin: 0;
+}
+
 .map {
   height: 98vh;
 }
