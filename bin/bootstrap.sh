@@ -7,7 +7,7 @@ set -e
 # TODO: Find a system for downloading all feed data (prob via an API)
 mkdir -p vendor
 cd vendor
-if ! test -f sfmta-60.zip; then
+if ! test -d sfmta-60; then
   wget http://transitfeeds.com/p/sfmta/60/latest/download --output-document sfmta-60.zip
   unzip sfmta-60.zip -d sfmta-60
   md5sum sfmta-60.zip > sfmta-60/MD5SUM
