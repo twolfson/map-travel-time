@@ -1,6 +1,7 @@
 // Load in our dependencies
 var _ = require('underscore');
 var browserify = require('browserify');
+var express = require('express');
 var gulp = require('gulp');
 var gulpBuffer = require('gulp-buffer');
 var gulpCsso = require('gulp-csso');
@@ -136,6 +137,13 @@ gulp.task('develop', ['build'], function develop () {
 
   // Start a livereload server
   gulpLivereload.listen();
+
+  // Start a local server
+  var PORT = 3000;
+  var app = express();
+  app.use(express.static(__dirname + '/dist'));
+  app.listen(PORT, 'localhost');
+  console.info('Development server listening at http://localhost:' + PORT + '/');
 
   // Integrate watchify on browserify
   browserifyObj.plugin(watchify);
