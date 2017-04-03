@@ -35,29 +35,42 @@ function Application(params) {
     zoom: 13
   });
 
-  // Add our map layer
+  // Define our tile layer
   // DEV: We are using OpenStreetmap as inspired by Mapnificent. No need to use Mapbox
   // https://switch2osm.org/using-tiles/getting-started-with-leaflet/
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
     minZoom: 8,
     maxZoom: 18
-  }).addTo(map);
+  });
+  osmLayer.addTo(map);
 
   // Draw dots for each of our stations
   // TODO: Make stations debuggable so group them in a layer or something
-  stopData.forEach(function generateStopMarker (stopInfo) {
+  var stopMarkers = stopData.map(function generateStopMarker (stopInfo) {
     // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
     //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}, ...]
     // to '2ND ST ... (id: 98, code: 198)'
     var popupStr = stopInfo.stop_name + ' (id: ' + escapeHtml(stopInfo.stop_id) + ', ' +
       'code: ' + escapeHtml(stopInfo.stop_code) + ')';
-    L.circleMarker([stopInfo.stop_lat, stopInfo.stop_lon], {
+    return L.circleMarker([stopInfo.stop_lat, stopInfo.stop_lon], {
       stroke: false,
       fillOpacity: 1.0,
       radius: 3
-    }).bindPopup(popupStr).addTo(map);
+    }).bindPopup(popupStr);
   });
+  var stopMarkersLayer = L.layerGroup(stopMarkers);
+  // TODO: Disable stops layer after development complete
+  stopMarkersLayer.addTo(map);
+
+  // Bind our layers to our map
+  // http://leafletjs.com/examples/layers-control/
+  // http://leafletjs.com/reference.html#control-layers
+  L.control.layers({
+    OpenStreetMap: osmLayer
+  }, {
+    Stops: stopMarkersLayer
+  }).addTo(map);
 
   // When a click occurs
   // TODO: Swap this out with a plugin
