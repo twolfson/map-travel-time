@@ -18,19 +18,21 @@ function Application(params) {
     console.error('Error encountered', stopResults.errors[0]);
     throw new Error(stopResults.errors[0].message);
   }
+  // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
+  //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}, ...]
   var stopData = stopResults.data;
 
   // Slice our stop data for development
   // TODO: Remove dev edit
-  // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
-  //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}]
   stopData = stopData.slice(0, 10);
-  console.log(JSON.stringify(stopData));
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory
+  // TODO: Determine good starting point for each city
+  //   Maybe make SF Bay Area multiple locations with same files
+  //   So SF and Oakland all start in nice points
   var map = L.map(params.el, {
-    center: [51.505, -0.09],
+    center: [stopData[0].stop_lat, stopData[0].stop_lon],
     zoom: 13
   });
 
@@ -42,6 +44,9 @@ function Application(params) {
     minZoom: 8,
     maxZoom: 18
   }).addTo(map);
+
+  // Draw dots for each of our stations
+  // TODO: Make stations debuggable so group them in a layer or something
 
   // When a click occurs
   // TODO: Swap this out with a plugin
