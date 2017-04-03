@@ -35,7 +35,8 @@
     "test-karma-single": "DISPLAY=\"\" xvfb-maybe karma start"
   },
   "dependencies": {
-    "leaflet": "~1.0.3"
+    "leaflet": "~1.0.3",
+    "papaparse": "~4.2.0"
   },
   "devDependencies": {
     "browserify": "~14.1.0",

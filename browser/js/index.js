@@ -1,6 +1,7 @@
 // Load in our dependencies
 // Based on http://leafletjs.com/examples/quick-start/
 var assert = require('assert');
+var Papa = require('papaparse');
 var L = require('leaflet');
 
 // Define our Application constructor
@@ -8,6 +9,21 @@ function Application(params) {
   // Verify we have our parameters
   assert(params.csvStopData);
   assert(params.el);
+
+  // Parse our stop info
+  var stopResults = Papa.parse(params.csvStopData, {
+    header: true
+  });
+  if (stopResults.errors.length) {
+    console.error('Error encountered', stopResults.errors[0]);
+    throw new Error(stopResults.errors[0].message);
+  }
+  var stopData = stopResults.data;
+
+  // Slice our stop data for development
+  // TODO: Remove dev edit
+  stopData = stopData.slice(0, 10);
+  console.log(stopData);
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory

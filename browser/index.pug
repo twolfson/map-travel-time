@@ -9,10 +9,11 @@ html
 
     //- Expose our GTFS data
     //- TODO: Re-encode data via protobuf and optimize it for our needs as per Mapnificent
+    //- DEV: We trim loaded data to prevent empty lines being parsed
     script
       - var fs = require('fs');
       - var jsStringify = require('js-stringify');
-      - var csvStopData = fs.readFileSync(__dirname + '/../vendor/sfmta-60/stops.txt', 'utf8');
+      - var csvStopData = fs.readFileSync(__dirname + '/../vendor/sfmta-60/stops.txt', 'utf8').trim();
       | window.csvStopData = !{jsStringify(csvStopData)};
 
     //- Load our application
