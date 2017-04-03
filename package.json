@@ -15,14 +15,14 @@
   "bugs": {
     "url": "https://github.com/twolfson/map-travel-time/issues"
   },
-  "main": "lib/map-travel-time",
+  "main": "browser/map-travel-time",
   "engines": {
     "node": ">= 4.0.0"
   },
   "license": "Unlicense",
   "scripts": {
     "build": "gulp build",
-    "lint": "twolfson-style lint lib/ test/",
+    "lint": "twolfson-style lint browser/ test/",
     "test": "mocha --reporter dot && npm run lint"
   },
   "dependencies": {},
