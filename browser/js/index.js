@@ -22,8 +22,10 @@ function Application(params) {
 
   // Slice our stop data for development
   // TODO: Remove dev edit
+  // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
+  //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}]
   stopData = stopData.slice(0, 10);
-  console.log(stopData);
+  console.log(JSON.stringify(stopData));
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory
