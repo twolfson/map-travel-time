@@ -4,6 +4,7 @@ var browserify = require('browserify');
 var gulp = require('gulp');
 var gulpBuffer = require('gulp-buffer');
 var gulpCsso = require('gulp-csso');
+var gulpPug = require('gulp-pug');
 var gulpLivereload = require('gulp-livereload');
 var gulpNotify = require('gulp-notify');
 var gulpSourcemaps = require('gulp-sourcemaps');
@@ -23,6 +24,32 @@ var config = {
 gulp.task('build-clean', function clean (done) {
   // Remove all compiled files in `dist`
   rimraf(__dirname + '/dist', done);
+});
+
+gulp.task('build-html', function buildCss () {
+  // Generate a stream that compiles our Pug as CSS
+  // DEV: We return the pipe'd stream so gulp knows when we exit
+  var htmlStream = gulp.src('browser/*.pug')
+    .pipe(gulpPug());
+
+  // If we are allowing failures, then log them
+  // DEV: Desktop notifications are a personal preference
+  //   If they get unwieldy, feel free to move to logging only
+  //   But be sure to continue to emit an `end` event
+  if (config.allowFailures) {
+    htmlStream.on('error', gulpNotify.onError());
+  }
+
+  // If we are minifying assets, then minify them
+  if (config.minifyAssets) {
+    htmlStream = htmlStream
+      .pipe(gulpSizereport({gzip: true}));
+  }
+
+  // Output our CSS and notify LiveReload
+  return htmlStream
+    .pipe(gulp.dest('dist'))
+    .pipe(gulpLivereload());
 });
 
 gulp.task('build-css', function buildCss () {
@@ -94,7 +121,7 @@ gulp.task('build-js', function buildJs () {
     .pipe(gulpLivereload());
 });
 
-gulp.task('build', ['build-css', 'build-js']);
+gulp.task('build', ['build-html', 'build-css', 'build-js']);
 
 // Define our development tasks
 gulp.task('livereload-update', function livereloadUpdate () {
@@ -120,6 +147,7 @@ gulp.task('develop', ['build'], function develop () {
   browserifyObj.bundle().on('data', function () {});
 
   // When one of our src files changes, re-run its corresponding task
+  gulp.watch('browser/*.pug', ['build-html']);
   gulp.watch('browser/css/**/*.css', ['build-css']);
   gulp.watch('server/**/*', ['livereload-update']);
 });
