@@ -29,9 +29,11 @@ gulp.task('build-clean', function clean (done) {
 gulp.task('build-html', function buildCss () {
   // Generate a stream that compiles our Pug as CSS
   // DEV: We return the pipe'd stream so gulp knows when we exit
-  var htmlStream = gulp.src('browser/*.pug')
+  var htmlStream = gulp.src('browser/index.pug')
     .pipe(gulpPug({
       locals: {
+        __filename: __filename + '/browser/index.pug',
+        __dirname: __dirname + '/browser',
         require: require
       }
     }));

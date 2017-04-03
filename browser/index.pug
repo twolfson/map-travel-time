@@ -6,11 +6,19 @@ html
     link(rel="stylesheet", href="/css/index.css", text="text/css")
   body
     .map
-    script(src="/js/index.js")
+
     //- Expose our GTFS data
-    - var fs = require('fs');
+    //- TODO: Re-encode data via protobuf and optimize it for our needs as per Mapnificent
+    script
+      - var fs = require('fs');
+      - var jsStringify = require('js-stringify');
+      - var csvStopData = fs.readFileSync(__dirname + '/../vendor/sfmta-60/stops.txt', 'utf8');
+      | window.csvStopData = !{jsStringify(csvStopData)};
+
+    //- Load our application
+    script(src="/js/index.js")
     script.
       window.app = new window.Application({
         el: document.querySelector('.map'),
-        csvStopData: 'pending'
+        csvStopData: window.csvStopData
       });

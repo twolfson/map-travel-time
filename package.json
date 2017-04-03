@@ -51,6 +51,7 @@
     "gulp-sizereport": "~1.2.0",
     "gulp-sourcemaps": "~2.5.0",
     "gulp-uglify": "~2.1.2",
+    "js-stringify": "~1.0.2",
     "jscs": "~3.0.7",
     "jshint": "~2.9.4",
     "karma": "~1.5.0",
