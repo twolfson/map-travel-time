@@ -13,13 +13,17 @@ html
     script
       - var fs = require('fs');
       - var jsStringify = require('js-stringify');
-      - var csvStopData = fs.readFileSync(__dirname + '/../vendor/sfmta-60/stops.txt', 'utf8').trim();
-      | window.csvStopData = !{jsStringify(csvStopData)};
+      - var readVendorFile = function (filepath) { return fs.readFileSync(__dirname + '/../vendor/' + filepath, 'utf8').trim(); };
+      | window.csvStopsStr = !{jsStringify(readVendorFile('sfmta-60/stops.txt'))};
+      | window.csvStopTimesStr = !{jsStringify(readVendorFile('sfmta-60/stop_times.txt'))};
+      | window.csvTripsStr = !{jsStringify(readVendorFile('sfmta-60/trips.txt'))};
 
     //- Load our application
     script(src="/js/index.js")
     script.
       window.app = new window.Application({
         el: document.querySelector('.map'),
-        csvStopData: window.csvStopData
+        csvStopsStr: window.csvStopsStr,
+        csvStopTimesStr: window.csvStopTimesStr,
+        csvTripsStr: window.csvTripsStr
       });
