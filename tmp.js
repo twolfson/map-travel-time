@@ -47,12 +47,12 @@ function readVendorFile(filepath) {
 }
 
 // Load in our stop data
-console.log('start...');
+console.log('Loading file...');
 var stopTimes = readVendorFile(__dirname + '/vendor/sfmta-60/stop_times.txt');
-console.log('stop');
+console.log('File loaded');
 
 // TODO: Remove DEV slicing
-stopTimes = stopTimes.slice(0, 10);
+// stopTimes = stopTimes.slice(0, 10);
 
 // Group our trip datas by their id
 var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime) {
@@ -71,4 +71,4 @@ _.each(retObj, function iterateStopTimeArrs (stopTimeArr, tripId) {
     });
   });
 });
-console.log(retObj);
+console.log(JSON.stringify(retObj, null, 2));
