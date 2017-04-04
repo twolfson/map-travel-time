@@ -62,6 +62,8 @@ var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime
 // Strip away data we don't need
 // DEV: We use a similar compression to Google Calendar's timezones
 //   i.e. ['trip_id', ['stop_id', 'timestamp']]
+//   This reduces us from 260kb gzipped to 170kb gzipped
+//   Due to sheer number of repeated keys/references
 var VALID_KEYS = ['stop_id'];
 var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeArr, tripId) {
   return [
@@ -73,7 +75,6 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
 });
 
 // Output our data
-// DEV: 162kb gzipped with only stop ids bound to trip id
+// DEV: 170kb gzipped with only stop ids bound to trip id
 //   node tmp.js | gzip | wc -c
-// DEV: 742kb gzipped with a hardcoded time "diff" for trip id
 console.log(JSON.stringify(retArr));
