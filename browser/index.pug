@@ -21,7 +21,7 @@ html
       - var fs = require('fs');
       - var jsStringify = require('js-stringify');
       //- TODO: Expand out data before passing it to app so we have a sane API
-      - var stopTimeData = JSON.parse(fs.readFileSync(__dirname + '/../tmp.txt', 'utf8'))
+      - var data = JSON.parse(fs.readFileSync(__dirname + '/../tmp.txt', 'utf8'))
       | window.app.loadData({
-      |   stopTimeData: !{jsStringify(stopTimeData)}
+      |   data: !{jsStringify(data)}
       | });
