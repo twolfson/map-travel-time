@@ -2,7 +2,6 @@
 var _ = require('underscore');
 var assert = require('assert');
 var fs = require('fs');
-var moment = require('moment');
 var Papa = require('papaparse');
 
 // Define our helpers
@@ -49,9 +48,9 @@ function readVendorFile(filepath) {
 }
 
 // Load in our stop data
-console.log('Loading file...');
+// console.log('Loading file...');
 var stopTimes = readVendorFile(__dirname + '/vendor/sfmta-60/stop_times.txt');
-console.log('File loaded');
+// console.log('File loaded');
 
 // TODO: Remove DEV slicing
 // stopTimes = stopTimes.slice(0, 10);

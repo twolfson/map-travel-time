@@ -20,9 +20,8 @@ html
     script
       - var fs = require('fs');
       - var jsStringify = require('js-stringify');
-      - var readVendorFile = function (filepath) { return fs.readFileSync(__dirname + '/../vendor/' + filepath, 'utf8').trim(); };
+      //- TODO: Expand out data before passing it to app so we have a sane API
+      - var stopTimeData = JSON.parse(fs.readFileSync(__dirname + '/../tmp.txt', 'utf8'))
       | window.app.loadData({
-      |   csvStopsStr: !{jsStringify(readVendorFile('sfmta-60/stops.txt'))},
-      //- |   csvStopTimesStr: !{jsStringify(readVendorFile('sfmta-60/stop_times.txt'))},
-      |   csvTripsStr: !{jsStringify(readVendorFile('sfmta-60/trips.txt'))}
+      |   stopTimeData: !{jsStringify(stopTimeData)}
       | });
