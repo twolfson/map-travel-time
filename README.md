@@ -6,6 +6,26 @@ Based on [Mapnificent][], cloned due to lack of maintenance, documentation, and 
 
 [Mapnificent]: https://github.com/mapnificent/mapnificent
 
+TODO: It's not feasible to load all stop times in browser. It yields too much data even after stripping and gzipping:
+
+```
+$ sed -E "s/([0-9]+)([0-9]{2}),[0-9:]+,[0-9:]+,[0-9]+,([0-9]+), , , ,/\2,\3/g" vendor/sfmta-60/stop_times2.txt | head
+trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled
+58,1
+58,2
+58,3
+58,4
+58,5
+58,6
+58,7
+58,8
+58,9
+$ sed -E "s/([0-9]+)([0-9]{2}),[0-9:]+,[0-9:]+,[0-9]+,([0-9]+), , , ,/\2,\3/g" vendor/sfmta-60/stop_times2.txt | gzip | wc -c
+1674522 # 1.6MB
+```
+
+This is when we cut off time data and try to shrink all valuable info. We now know why Mapnificent only loads stops =/ and fuzzes times
+
 ## Getting Started
 Install the module with: `npm install map-travel-time`
 
