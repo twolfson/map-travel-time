@@ -6,10 +6,12 @@ var Papa = require('papaparse');
 var L = require('leaflet');
 
 // Define a parser helper
-function parseCsvStr(csvStr) {
+function parseCsvStr(consoleLabel, csvStr) {
+  console.time(consoleLabel);
   var results = Papa.parse(csvStr, {
     header: true
   });
+  console.timeEnd(consoleLabel);
   if (results.errors.length) {
     console.error('Error encountered', results.errors[0]);
     throw new Error(results.errors[0].message);
@@ -23,8 +25,10 @@ function Application(params) {
   assert(params.csvStopsStr);
   assert(params.el);
 
-  // Parse our stop info
-  var stopInfoArr = parseCsvStr(params.csvStopsStr);
+  // Parse our CSV info
+  var stopInfoArr = parseCsvStr('Parsing stops', params.csvStopsStr);
+  var stopTimesInfoArr = parseCsvStr('Parsing stop times', params.csvStopTimesStr);
+  var tripInfoArr = parseCsvStr('Parsing trips', params.csvTripsStr);
 
   // Slice our stop data for development
   // TODO: Remove dev edit
