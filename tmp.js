@@ -1,4 +1,5 @@
 // Load in our dependencies
+var _ = require('underscore');
 var fs = require('fs');
 var Papa = require('papaparse');
 
@@ -24,4 +25,24 @@ console.log('start...');
 var stopTimes = parseCsvStr(csvStopTimesStr);
 console.log('stop');
 
-console.log(stopTimes.slice(0, 10));
+// TODO: Remove DEV slicing
+stopTimes = stopTimes.slice(0, 10);
+
+// Group our trip datas by their id
+var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime) {
+  return stopTime.trip_id;
+});
+
+// Strip away data we don't need
+var retObj = stopTimesMapByTripId;
+var VALID_KEYS = ['arrival_time', 'stop_id'];
+_.each(retObj, function iterateStopTimeArrs (stopTimeArr, tripId) {
+  stopTimeArr.forEach(function stripStopTimesData (stopTime) {
+    Object.keys(stopTime).forEach(function stripStopTimeData (key) {
+      if (VALID_KEYS.indexOf(key) === -1) {
+        delete stopTime[key];
+      }
+    });
+  });
+});
+console.log(retObj);
