@@ -14,14 +14,5 @@ html
         el: document.querySelector('.map')
       });
 
-    //- Load our GTFS data
-    //- TODO: Re-encode data via protobuf and optimize it for our needs as per Mapnificent
-    //- DEV: We trim loaded data to prevent empty lines being parsed
-    script
-      - var fs = require('fs');
-      - var jsStringify = require('js-stringify');
-      //- TODO: Expand out data before passing it to app so we have a sane API
-      - var data = JSON.parse(fs.readFileSync(__dirname + '/../tmp.txt', 'utf8'))
-      | window.app.loadData({
-      |   data: !{jsStringify(data)}
-      | });
+    //- Load our GTFS data via JSON-P
+    script(src="/js/json-p.js")

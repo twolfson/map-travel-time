@@ -125,4 +125,5 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
 //   node tmp.js | gzip | wc -c
 // DEV: 518kb gzipped with stop id and time to next stop
 // DEV: 435kb gzipped if we remove 1 order of magnitude from time to next stop
-console.log(JSON.stringify(retArr));
+//   Generate content via: `node tmp.js | tee dist/js/json-p.js | gzip | wc -c`
+console.log('window.app.loadData(' + JSON.stringify(retArr) + ')');
