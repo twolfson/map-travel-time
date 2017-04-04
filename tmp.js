@@ -60,19 +60,20 @@ var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime
 });
 
 // Strip away data we don't need
-var retObj = stopTimesMapByTripId;
+// DEV: We use a similar compression to Google Calendar's timezones
+//   i.e. ['trip_id', ['stop_id', 'timestamp']]
 var VALID_KEYS = ['stop_id'];
-_.each(retObj, function iterateStopTimeArrs (stopTimeArr, tripId) {
-  stopTimeArr.forEach(function stripStopTimesData (stopTime) {
-    Object.keys(stopTime).forEach(function stripStopTimeData (key) {
-      if (VALID_KEYS.indexOf(key) === -1) {
-        delete stopTime[key];
-      }
-    });
-  });
+var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeArr, tripId) {
+  return [
+    tripId,
+    stopTimeArr.map(function stripStopTimesData (stopTime) {
+      return _.values(_.pick(stopTime, VALID_KEYS));
+    })
+  ];
 });
 
 // Output our data
-// DEV: 442kb gzipped with only stop ids bound to trip id
+// DEV: 162kb gzipped with only stop ids bound to trip id
+//   node tmp.js | gzip | wc -c
 // DEV: 742kb gzipped with a hardcoded time "diff" for trip id
-console.log(JSON.stringify(retObj, null, 2));
+console.log(JSON.stringify(retArr));
