@@ -5,25 +5,30 @@ var escapeHtml = require('escape-html');
 var Papa = require('papaparse');
 var L = require('leaflet');
 
+// Define a parser helper
+function parseCsvStr(csvStr) {
+  var results = Papa.parse(csvStr, {
+    header: true
+  });
+  if (results.errors.length) {
+    console.error('Error encountered', results.errors[0]);
+    throw new Error(results.errors[0].message);
+  }
+  return results.data;
+}
+
 // Define our Application constructor
 function Application(params) {
   // Verify we have our parameters
-  assert(params.csvStopData);
+  assert(params.csvStopsStr);
   assert(params.el);
 
   // Parse our stop info
-  var stopResults = Papa.parse(params.csvStopData, {
-    header: true
-  });
-  if (stopResults.errors.length) {
-    console.error('Error encountered', stopResults.errors[0]);
-    throw new Error(stopResults.errors[0].message);
-  }
-  var stopData = stopResults.data;
+  var stopInfoArr = parseCsvStr(params.csvStopsStr);
 
   // Slice our stop data for development
   // TODO: Remove dev edit
-  // stopData = stopData.slice(0, 10);
+  // stopInfoArr = stopInfoArr.slice(0, 10);
 
   // Bind Leaflet to our element
   // http://leafletjs.com/reference-1.0.3.html#map-factory
@@ -31,7 +36,7 @@ function Application(params) {
   //   Maybe make SF Bay Area multiple locations with same files
   //   So SF and Oakland all start in nice points
   var map = L.map(params.el, {
-    center: [stopData[0].stop_lat, stopData[0].stop_lon],
+    center: [stopInfoArr[0].stop_lat, stopInfoArr[0].stop_lon],
     zoom: 13
   });
 
@@ -47,7 +52,7 @@ function Application(params) {
 
   // Draw dots for each of our stations
   // TODO: Make stations debuggable so group them in a layer or something
-  var stopMarkers = stopData.map(function generateStopMarker (stopInfo) {
+  var stopMarkers = stopInfoArr.map(function generateStopMarker (stopInfo) {
     // [{stop_id: '98', stop_code: '198', stop_name: '2ND ST ...', stop_desc: ' ',
     //   stop_lat: '37...', stop_lon: '-122...', zone_id: ' ', stop_url: ' '}, ...]
     // to '2ND ST ... (id: 98, code: 198)'
