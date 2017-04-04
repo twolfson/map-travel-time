@@ -54,7 +54,7 @@ var stopTimes = readVendorFile(__dirname + '/vendor/sfmta-60/stop_times.txt');
 console.log('File loaded');
 
 // TODO: Remove DEV slicing
-stopTimes = stopTimes.slice(0, 10);
+// stopTimes = stopTimes.slice(0, 10);
 
 // Group our trip datas by their id
 var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime) {
@@ -106,11 +106,11 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
 
       // Resolve time to our next stop
       if (currentDepartureTime >= nextArrivalTime) {
-        currentDepartureTime = currentDepartureTime % (24 * 60 * 60);
+        nextArrivalTime += 24 * 60 * 60;
       }
-      console.log(nextArrivalTime, currentDepartureTime);
       assert(currentDepartureTime < nextArrivalTime,
-        'Expected "' + currentDepartureTimeStr + '" to be less than "' + nextArrivalTimeStr + '" after modulo');
+        'Expected "' + currentDepartureTimeStr + '" to be less than "' + nextArrivalTimeStr + '" after modulo ' +
+        '(trip_id: ' + stopTime.trip_id + ', stop_id: ' + stopTime.stop_id + ')');
       var timeToNextStop = nextArrivalTime - currentDepartureTime;
 
       // Generate and return our data
@@ -124,4 +124,6 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
 // Output our data
 // DEV: 170kb gzipped with only stop ids bound to trip id
 //   node tmp.js | gzip | wc -c
+// DEV: 522kb gzipped with stop id and time to next stop
+// DEV: 435kb gzipped if we remove 1 order of magnitude from time to next stop
 console.log(JSON.stringify(retArr));
