@@ -15,7 +15,7 @@ html
       - var jsStringify = require('js-stringify');
       - var readVendorFile = function (filepath) { return fs.readFileSync(__dirname + '/../vendor/' + filepath, 'utf8').trim(); };
       | window.csvStopsStr = !{jsStringify(readVendorFile('sfmta-60/stops.txt'))};
-      | window.csvStopTimesStr = !{jsStringify(readVendorFile('sfmta-60/stop_times.txt'))};
+      //- | window.csvStopTimesStr = !{jsStringify(readVendorFile('sfmta-60/stop_times.txt'))};
       | window.csvTripsStr = !{jsStringify(readVendorFile('sfmta-60/trips.txt'))};
 
     //- Load our application
