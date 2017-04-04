@@ -61,6 +61,16 @@ var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime
   return stopTime.trip_id;
 });
 
+// Define time parsing helper
+var TIME_STR_REGEXP = /(\d{2}):(\d{2}):(\d{2})/;
+function parseTimeStr(timeStr) {
+  var timeParts = timeStr.match(TIME_STR_REGEXP);
+  assert(timeParts, 'Unable to match timeStr: ' + timeStr);
+  return (parseInt(timeParts[1], 10) * 60 * 60 +
+          parseInt(timeParts[2], 10) * 60 +
+          parseInt(timeParts[3], 10));
+}
+
 // Strip away data we don't need
 // DEV: We use a similar compression to Google Calendar's timezones
 //   i.e. ['trip_id', ['stop_id', 'time_to_next_stop']]
@@ -81,23 +91,26 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
     stopTimeArr.map(function stripStopTimesData (stopTime, i) {
       // Assume trips are circular
       // TODO: Figure out circular trip detection
-      var nextStop = stopTimeArr[i + 1] || stopTimeArr[0];
-      assert(nextStop);
+      var nextStopTime = stopTimeArr[i + 1] || stopTimeArr[0];
+      assert(nextStopTime);
 
       // Parse stop info
       // https://momentjs.com/docs/#/parsing/string-format/
       var currentDepartureTimeStr = stopTime.departure_time;
       assert(currentDepartureTimeStr);
-      var currentDepartureTime = moment('1970-01-01T' + currentDepartureTimeStr + 'Z');
-      assert(currentDepartureTime.isValid(), 'Time isn\'t valid: 1970-01-01T' + currentDepartureTimeStr + 'Z');
+      var currentDepartureTime = parseTimeStr(currentDepartureTimeStr);
 
-      var nextArrivalTimeStr = stopTime.arrival_time;
+      var nextArrivalTimeStr = nextStopTime.arrival_time;
       assert(nextArrivalTimeStr);
-      var nextArrivalTime = moment('1970-01-01T' + nextArrivalTimeStr + 'Z');
-      assert(nextArrivalTime.isValid());
+      var nextArrivalTime = parseTimeStr(nextArrivalTimeStr);
 
       // Resolve time to our next stop
-      assert(currentDepartureTime.isBefore(nextArrivalTime));
+      if (currentDepartureTime >= nextArrivalTime) {
+        currentDepartureTime = currentDepartureTime % (24 * 60 * 60);
+      }
+      console.log(nextArrivalTime, currentDepartureTime);
+      assert(currentDepartureTime < nextArrivalTime,
+        'Expected "' + currentDepartureTimeStr + '" to be less than "' + nextArrivalTimeStr + '" after modulo');
       var timeToNextStop = nextArrivalTime - currentDepartureTime;
 
       // Generate and return our data
