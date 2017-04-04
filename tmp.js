@@ -61,7 +61,7 @@ var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime
 
 // Strip away data we don't need
 var retObj = stopTimesMapByTripId;
-var VALID_KEYS = ['arrival_time', 'stop_id'];
+var VALID_KEYS = ['stop_id'];
 _.each(retObj, function iterateStopTimeArrs (stopTimeArr, tripId) {
   stopTimeArr.forEach(function stripStopTimesData (stopTime) {
     Object.keys(stopTime).forEach(function stripStopTimeData (key) {
@@ -71,4 +71,8 @@ _.each(retObj, function iterateStopTimeArrs (stopTimeArr, tripId) {
     });
   });
 });
+
+// Output our data
+// DEV: 442kb gzipped with only stop ids bound to trip id
+// DEV: 742kb gzipped with a hardcoded time "diff" for trip id
 console.log(JSON.stringify(retObj, null, 2));
