@@ -81,13 +81,13 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
   // Extract our first arrival time for serialization
   var firstStop = stopTimeArr[0];
   assert(firstStop);
-  var firstArrivalTime = firstStop.arrival_time;
-  assert(firstArrivalTime);
+  var firstArrivalTimeStr = firstStop.arrival_time;
+  assert(firstArrivalTimeStr);
 
   // Generate our return data
   return [
     tripId,
-    stopTimeArr[0].arrival_time,
+    parseTimeStr(firstArrivalTimeStr),
     stopTimeArr.map(function stripStopTimesData (stopTime, i) {
       // Assume trips are circular
       // TODO: Figure out circular trip detection
@@ -124,6 +124,6 @@ var retArr = _.map(stopTimesMapByTripId, function iterateStopTimeArrs (stopTimeA
 // Output our data
 // DEV: 170kb gzipped with only stop ids bound to trip id
 //   node tmp.js | gzip | wc -c
-// DEV: 522kb gzipped with stop id and time to next stop
+// DEV: 518kb gzipped with stop id and time to next stop
 // DEV: 435kb gzipped if we remove 1 order of magnitude from time to next stop
 console.log(JSON.stringify(retArr));
