@@ -4,6 +4,7 @@ var assert = require('assert');
 var escapeHtml = require('escape-html');
 var Papa = require('papaparse');
 var L = require('leaflet');
+void require('mapbox-gl-leaflet');
 
 // Define our Application constructor
 function Application(params) {
@@ -38,10 +39,9 @@ function Application(params) {
   // Define our tile layer
   // DEV: We are using OpenStreetmap as inspired by Mapnificent. No need to use Mapbox
   // https://switch2osm.org/using-tiles/getting-started-with-leaflet/
-  var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-    minZoom: 8,
-    maxZoom: 18
+  var osmLayer = L.mapboxGL({
+      accessToken: 'ACCESS_TOKEN',
+      style: 'mapbox://styles/mapbox/bright-v8'
   });
   osmLayer.addTo(map);
 
