@@ -142,8 +142,10 @@ module.exports = function (cb) {
 // DEV: 518kb gzipped with stop id and time to next stop
 // DEV: 435kb gzipped if we remove 1 order of magnitude from time to next stop
 // TODO: Save even more space by flattening array entirely and using string based delimiters
+// TODO: Save even more space by removing quotes on ids (i.e. convert to integers)
+// TODO: Save even more space by converting numbers to base16
 if (require.main === module) {
-  module.exports(function handleGenerateJSONP (err, jsonp) {
+  module.exports(function handleGenerateJsonP (err, jsonp) {
     // If there was an error, throw it
     if (err) {
       throw err;

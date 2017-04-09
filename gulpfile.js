@@ -26,7 +26,11 @@ gulp.task('build-clean', function clean (done) {
   rimraf(__dirname + '/dist', done);
 });
 
-gulp.task('build-html', function buildCss () {
+gulp.task('build-json-p', function buildJsonP (cb) {
+
+});
+
+gulp.task('build-html', ['build-json-p'], function buildHtml () {
   // Generate a stream that compiles our Pug as CSS
   // DEV: We return the pipe'd stream so gulp knows when we exit
   var htmlStream = gulp.src('browser/index.pug')
