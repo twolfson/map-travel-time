@@ -4,6 +4,7 @@ var assert = require('assert');
 var fs = require('fs');
 var async = require('async');
 var Papa = require('papaparse');
+var StopTime = require('../browser/js/proto-types').StopTime;
 var logger = console;
 
 // Define our helpers
@@ -110,7 +111,7 @@ function buildStopTimes(cb) {
       return {
         trip_id: tripId,
         first_arrival_time: parseTimeStr(firstArrivalTimeStr),
-        stops: stopTimeArr.map(function stripStopTimesData (stopTime, i) {
+        stop_time_diffs: stopTimeArr.map(function stripStopTimesData (stopTime, i) {
           // Assume trips are circular
           // TODO: Figure out circular trip detection
           var nextStopTime = stopTimeArr[i + 1] || stopTimeArr[0];
@@ -164,17 +165,17 @@ function buildTrips(cb) {
 module.exports = function (cb) {
   async.parallel([
     buildStopTimes,
-    buildStops,
-    buildTrips
+    // buildStops,
+    // buildTrips
   ], function handleResults (err, results) {
     // If there was an error, callback with it
 
     // Otherwise, callback with a JSON-P string
-    assert.strictEqual(results.length, 3);
+    // assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData(' + JSON.stringify({
       stopTimes: results[0],
-      stops: results[1],
-      trips: results[2]
+      // stops: results[1],
+      // trips: results[2]
     }) + ')');
   });
 };

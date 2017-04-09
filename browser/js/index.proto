@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+// https://developers.google.com/protocol-buffers/docs/proto3
+message StopTimeDiff {
+  string stop_id = 1;
+  uint32 time_to_next_stop = 2;
+}
+
+message StopTime {
+  string trip_id = 1;
+  uint32 first_arrival_time = 2;
+  repeated StopTimeDiff stop_time_diffs = 3;
+}
