@@ -67,6 +67,10 @@ function buildStopTimes(cb) {
       return cb(err);
     }
 
+    // TODO: Remove slice for development
+    // Cut down data for development iteration
+    stopTimes = stopTimes.slice(0, 10);
+
     // Group our trip datas by their id
     // [{trip_id: '7342058', arrival_time: '26:04:21', departure_time: '26:04:21',
     //   stop_id: '6316', stop_sequence: '8', stop_headsign: ' ', pickup_type: ' ',
@@ -102,10 +106,11 @@ function buildStopTimes(cb) {
       assert(firstArrivalTimeStr);
 
       // Generate our return data
-      return [
-        tripId,
-        parseTimeStr(firstArrivalTimeStr),
-        stopTimeArr.map(function stripStopTimesData (stopTime, i) {
+      // DEV: We use `snake_case` for consistency with Protobuf standards
+      return {
+        trip_id: tripId,
+        first_arrival_time: parseTimeStr(firstArrivalTimeStr),
+        stops: stopTimeArr.map(function stripStopTimesData (stopTime, i) {
           // Assume trips are circular
           // TODO: Figure out circular trip detection
           var nextStopTime = stopTimeArr[i + 1] || stopTimeArr[0];
@@ -131,11 +136,12 @@ function buildStopTimes(cb) {
           var timeToNextStop = nextArrivalTime - currentDepartureTime;
 
           // Generate and return our data
-          var values = _.values(_.pick(stopTime, VALID_KEYS));
-          assert.strictEqual(values.length, VALID_KEYS.length);
-          return values.concat([timeToNextStop]);
+          var retObj = _.pick(stopTime, VALID_KEYS);
+          assert.deepEqual(Object.keys(retObj), VALID_KEYS);
+          retObj.time_to_next_stop = timeToNextStop;
+          return retObj;
         })
-      ];
+      };
     });
 
     // Callback with our data
