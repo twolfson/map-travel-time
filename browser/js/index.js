@@ -9,7 +9,6 @@ var ProtobufTypes = require('./protobuf-types');
 function parseProtobufTypeArr(consoleLabel, protobufClass, protobufStrArr) {
   console.time(consoleLabel);
   var retArr = protobufStrArr.map(function decodeProtobufStr (protobufStr) {
-    console.log('uhhh wat', protobufStr, protobufClass);
     return protobufClass.toObject(protobufStr);
   });
   console.timeEnd(consoleLabel);
@@ -79,17 +78,18 @@ function Application(params) {
 }
 Application.prototype = {
   loadData: function (params) {
-    // Parse our CSV info
+    // Parse our Protobuf info
     var stopTimes = params.stopTimes; assert(stopTimes);
     var stops = params.stops; assert(stops);
     var trips = params.trips; assert(trips);
+    stopTimes = parseProtobufTypeArr('Parsing stop times', ProtobufTypes.StopTime, stopTimes);
+    stops = parseProtobufTypeArr('Parsing stops', ProtobufTypes.Stpo, stops);
+    trips = parseProtobufTypeArr('Parsing trips', ProtobufTypes.Trip, trips);
     var stopInfoArr = stops;
 
     // Slice our stop data for development
     // TODO: Remove dev edit
-    stopInfoArr = stopInfoArr.slice(0, 10);
-    console.log(stopInfoArr);
-    console.log(parseProtobufTypeArr('Parsing stop times', ProtobufTypes.StopTime, stopInfoArr));
+    // stopInfoArr = stopInfoArr.slice(0, 10);
 
     // Recenter our map
     this.map.panTo([stopInfoArr[0].stop_lat, stopInfoArr[0].stop_lon]);
