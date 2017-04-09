@@ -130,14 +130,15 @@ gulp.task('build-js', function buildJs () {
 
 gulp.task('build-json-p', function buildJsonPFn () {
   // Generate our stream to write to and return
-  var jsonPStream = vinylSourceStream('json-p.js');
+  var inStream = vinylSourceStream('json-p.js');
+  var jsonPStream = inStream.pipe(gulpBuffer());
 
   // Build our JSON-P and pass it to the stream
   buildJsonP(function handleBuildJsonP (err, jsonP) {
     if (err) {
-      jsonPStream.emit('error', err);
+      inStream.emit('error', err);
     } else {
-      jsonPStream.write(jsonP);
+      inStream.end(jsonP);
     }
   });
 
@@ -149,10 +150,10 @@ gulp.task('build-json-p', function buildJsonPFn () {
     jsonPStream.on('error', gulpNotify.onError());
   }
 
-  // If we are minifying assets, then minify them
+  // If we are minifying assets, then output size
+  // DEV: We don't minify this asset due to it already being compressed by hand and it has a huge AST
   if (config.minifyAssets) {
     jsonPStream = jsonPStream
-      .pipe(gulpUglify())
       .pipe(gulpSizereport({gzip: true}));
   }
 
