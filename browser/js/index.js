@@ -83,13 +83,17 @@ Application.prototype = {
     var stops = params.stops; assert(stops);
     var trips = params.trips; assert(trips);
     stopTimes = parseProtobufTypeArr('Parsing stop times', ProtobufTypes.StopTime, stopTimes);
-    stops = parseProtobufTypeArr('Parsing stops', ProtobufTypes.Stpo, stops);
+    stops = parseProtobufTypeArr('Parsing stops', ProtobufTypes.Stop, stops);
     trips = parseProtobufTypeArr('Parsing trips', ProtobufTypes.Trip, trips);
     var stopInfoArr = stops;
 
     // Slice our stop data for development
     // TODO: Remove dev edit
-    // stopInfoArr = stopInfoArr.slice(0, 10);
+    stopInfoArr = stopInfoArr.slice(0, 10);
+    // console.log(stopInfoArr, params.stops, ProtobufTypes.Stop.toObject(params.stops[0]));
+    console.log(stopTimes[0]);
+    console.log(stops[0]);
+    console.log(trips[0]);
 
     // Recenter our map
     this.map.panTo([stopInfoArr[0].stop_lat, stopInfoArr[0].stop_lon]);
