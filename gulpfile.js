@@ -192,5 +192,4 @@ gulp.task('develop', ['build'], function develop () {
   gulp.watch('browser/*.pug', ['build-html']);
   gulp.watch('browser/css/**/*.css', ['build-css']);
   gulp.watch('server/**/*', ['livereload-update']);
-  gulp.watch('vendor/**/*', ['build-json-p']);
 });

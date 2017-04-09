@@ -165,7 +165,7 @@ module.exports = function (cb) {
       trips: results[2]
     }) + ')');
   });
-}
+};
 
 // If we are running our script directly, output to `stdout`
 // DEV: 170kb gzipped with only stop ids bound to trip id
@@ -175,6 +175,7 @@ module.exports = function (cb) {
 // TODO: Save even more space by flattening array entirely and using string based delimiters
 // TODO: Save even more space by removing quotes on ids (i.e. convert to integers)
 // TODO: Save even more space by converting numbers to base16
+// TODO: Normalize stops and trips (currently adding 200kb gzipped bulk)
 if (require.main === module) {
   module.exports(function handleGenerateJsonP (err, jsonp) {
     // If there was an error, throw it
