@@ -172,13 +172,13 @@ module.exports = function (cb) {
 
     // Otherwise, callback with a JSON-P string
     // assert.strictEqual(results.length, 3);
-    cb(null, 'window.app.loadData(' + JSON.stringify({
-      stopTimes: results[0].map(function (stopTime) {
+    cb(null, 'window.app.loadData({' +
+      'stopTimes: ["' + results[0].map(function (stopTime) {
         return StopTime.encode(stopTime).finish().toString('utf8');
-      }),
+      }).join('","') + '"]' +
       // stops: results[1],
       // trips: results[2]
-    }) + ')');
+    '})');
   });
 };
 
