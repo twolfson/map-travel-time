@@ -13,7 +13,7 @@ function readVendorFile(filepath, cb) {
   try {
     var cachedStr = fs.readFileSync(cacheFilepath, 'utf8');
     var cachedRetVal = JSON.parse(cachedStr);
-    return cachedRetVal;
+    cb(null, cachedRetVal);
   // When an error occurs
   } catch (err) {
     // If the error was about our file not existing
@@ -40,7 +40,7 @@ function readVendorFile(filepath, cb) {
     });
     if (results.errors.length) {
       console.error('Error encountered', results.errors[0]);
-      throw new Error(results.errors[0].message);
+      return cb(new Error(results.errors[0].message));
     }
     var retVal = results.data;
 
