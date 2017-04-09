@@ -70,7 +70,7 @@ function buildStopTimes(cb) {
 
     // TODO: Remove slice for development
     // Cut down data for development iteration
-    stopTimes = stopTimes.slice(0, 10);
+    // stopTimes = stopTimes.slice(0, 10);
 
     // Group our trip datas by their id
     // [{trip_id: '7342058', arrival_time: '26:04:21', departure_time: '26:04:21',
@@ -173,7 +173,9 @@ module.exports = function (cb) {
     // Otherwise, callback with a JSON-P string
     // assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData(' + JSON.stringify({
-      stopTimes: results[0],
+      stopTimes: results[0].map(function (stopTime) {
+        return StopTime.encode(stopTime).finish().toString('utf8');
+      }),
       // stops: results[1],
       // trips: results[2]
     }) + ')');
