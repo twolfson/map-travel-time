@@ -4,7 +4,7 @@ var assert = require('assert');
 var fs = require('fs');
 var async = require('async');
 var Papa = require('papaparse');
-var StopTime = require('../browser/js/proto-types').StopTime;
+var StopTimes = require('../browser/js/proto-types').StopTimes;
 var logger = console;
 
 // Define our helpers
@@ -173,9 +173,10 @@ module.exports = function (cb) {
     // Otherwise, callback with a JSON-P string
     // assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData({' +
-      'stopTimes: ["' + results[0].map(function (stopTime) {
-        return StopTime.encode(stopTime).finish().toString('utf8');
-      }).join('","') + '"]' +
+      // TODO: Escape JS string since we are no longer using JSON
+      'stopTimes: "' + StopTimes.encode({
+        stop_times: results[0]
+      }).finish().toString('utf8') + '"' +
       // stops: results[1],
       // trips: results[2]
     '})');
@@ -183,13 +184,11 @@ module.exports = function (cb) {
 };
 
 // If we are running our script directly, output to `stdout`
-// DEV: 170kb gzipped with only stop ids bound to trip id
+// DEV: We initially used a flat array a la Google Calendar
+//   but found Protobuf worked better as inspired by Mapnificent
+// DEV: 386kb gzipped with only stop times data
 //   node tmp.js | gzip | wc -c
-// DEV: 518kb gzipped with stop id and time to next stop
-// DEV: 435kb gzipped if we remove 1 order of magnitude from time to next stop
-// TODO: Save even more space by flattening array entirely and using string based delimiters
-// TODO: Save even more space by removing quotes on ids (i.e. convert to integers)
-// TODO: Save even more space by converting numbers to base16
+// DEV: 391kb when all in 1 string
 // TODO: Normalize stops and trips (currently adding 200kb gzipped bulk)
 if (require.main === module) {
   module.exports(function handleGenerateJsonP (err, jsonp) {

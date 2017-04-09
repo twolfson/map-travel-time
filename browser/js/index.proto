@@ -11,3 +11,7 @@ message StopTime {
   uint32 first_arrival_time = 2;
   repeated StopTimeDiff stop_time_diffs = 3;
 }
+
+message StopTimes {
+  repeated StopTime stop_times = 1;
+}
