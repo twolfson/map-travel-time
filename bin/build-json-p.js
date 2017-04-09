@@ -170,6 +170,9 @@ module.exports = function (cb) {
     // buildTrips
   ], function handleResults (err, results) {
     // If there was an error, callback with it
+    if (err) {
+      return cb(err);
+    }
 
     // Otherwise, callback with a JSON-P string
     // assert.strictEqual(results.length, 3);
