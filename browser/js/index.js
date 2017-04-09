@@ -3,13 +3,14 @@
 var assert = require('assert');
 var escapeHtml = require('escape-html');
 var L = require('leaflet');
-var ProtobufTypes = require('./protobuf-types').ProtobufTypes;
+var ProtobufTypes = require('./protobuf-types');
 
 // Define a parser helper
 function parseProtobufTypeArr(consoleLabel, protobufClass, protobufStrArr) {
   console.time(consoleLabel);
   var retArr = protobufStrArr.map(function decodeProtobufStr (protobufStr) {
-
+    console.log('uhhh wat', protobufStr, protobufClass);
+    return protobufClass.decode(protobufStr);
   });
   console.timeEnd(consoleLabel);
   return retArr;
@@ -86,8 +87,9 @@ Application.prototype = {
 
     // Slice our stop data for development
     // TODO: Remove dev edit
-    // stopInfoArr = stopInfoArr.slice(0, 10);
-    console.log(params);
+    stopInfoArr = stopInfoArr.slice(0, 10);
+    console.log(stopInfoArr);
+    console.log(parseProtobufTypeArr('Parsing stop times', ProtobufTypes.StopTime, stopInfoArr));
 
     // Recenter our map
     this.map.panTo([stopInfoArr[0].stop_lat, stopInfoArr[0].stop_lon]);
