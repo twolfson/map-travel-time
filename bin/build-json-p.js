@@ -5,7 +5,7 @@ var fs = require('fs');
 var async = require('async');
 var jsStringEscape = require('js-string-escape');
 var Papa = require('papaparse');
-var StopTime = require('../browser/js/proto-types').StopTime;
+var ProtoTypes = require('../browser/js/proto-types');
 var logger = console;
 
 // Define our helpers
@@ -163,11 +163,20 @@ function buildTrips(cb) {
 }
 
 // Define our main function
+function stringifyArr(ProtoClass, arr) {
+  // ["protobuf-data", "protobuf-data", ...]
+  return '[' +
+    arr.map(function serializeItem (item) {
+      var encodedStr = ProtoClass.encode(item).finish().toString('utf8');
+      return '"' + jsStringEscape(encodedStr) + '"';
+    }).join(',') +
+  ']';
+}
 module.exports = function (cb) {
   async.parallel([
     buildStopTimes,
-    // buildStops,
-    // buildTrips
+    buildStops,
+    buildTrips
   ], function handleResults (err, results) {
     // If there was an error, callback with it
     if (err) {
@@ -175,17 +184,12 @@ module.exports = function (cb) {
     }
 
     // Otherwise, callback with a JSON-P string
-    // assert.strictEqual(results.length, 3);
+    assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData({' +
-      // TODO: Escape JS string since we are no longer using JSON
-      'stopTimes: [' +
-        results[0].map(function serializeStopTime (stopTime) {
-          var encodedStr = StopTime.encode(stopTime).finish().toString('utf8');
-          return '"' + jsStringEscape(encodedStr) + '"';
-        }).join(',') +
-      '],' +
-      // stops: results[1],
-      // trips: results[2]
+      // stopTimes: ["protobuf-data", ...],
+      'stopTimes: ' + stringifyArr(ProtoTypes.StopTime, results[0]) + ',' +
+      'stops: ' + stringifyArr(ProtoTypes.Stop, results[1]) + ',' +
+      'trips: ' + stringifyArr(ProtoTypes.Trip, results[2]) +
     '})');
   });
 };
