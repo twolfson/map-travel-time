@@ -21,4 +21,9 @@ html
     script.
       //- With protobuf: 2600-3000ms total without even parsing stop times
       //- With flat array: it's 2000 on average with occasional 3600
+      //- TODO: Let's move forward with Protobuf as it doesn't drain more time on serialization
+      //-   Ideal setup would likely be flat arrays with custom serialization methods and reader methods
+      //-   For example:
+      //      TimeStop(data).stringify(); /* Returns ['trip_id', ...] */
+      //      TimeStop.get(arr, 'abc'); /* Accesses nth index without initializing new object */
       window.console.timeEnd('JSON-P loading');
