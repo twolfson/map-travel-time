@@ -10,49 +10,47 @@ function readVendorFile(filepath, cb) {
   // If we have already parsed our file into JSON, then load that
   // DEV: JSON loads much faster, hence our preference
   var cacheFilepath = filepath + '.json';
-  try {
-    var cachedStr = fs.readFileSync(cacheFilepath, 'utf8');
-    var cachedRetVal = JSON.parse(cachedStr);
-    cb(null, cachedRetVal);
-  // When an error occurs
-  } catch (err) {
-    // If the error was about our file not existing
-    if (err.code === 'ENOENT') {
-      // Do nothing
-    // Otherwise, callback with it
-    } else {
-      return cb(err);
-    }
-  }
-
-  // Load our initial file
-  fs.readFile(filepath, 'utf8', function handleReadFile (err, csvStr) {
-    // If there was an error, callback with it
-    if (err) {
+  fs.readFile(cacheFilepath, 'utf8', function handleReadFile (err, cachedStr) {
+    // If there was an error that wasn't about our file not existing, callback with it
+    if (err && err.code !== 'ENOENT') {
       return cb(err);
     }
 
-    // Parse our CSV result
-    // DEV: We trim loaded data to prevent empty lines being parsed
-    csvStr = csvStr.trim();
-    var results = Papa.parse(csvStr, {
-      header: true
-    });
-    if (results.errors.length) {
-      console.error('Error encountered', results.errors[0]);
-      return cb(new Error(results.errors[0].message));
+    // If we loaded content, then callback with it
+    if (cachedStr) {
+      var cachedRetVal = JSON.parse(cachedStr);
+      return cb(null, cachedRetVal);
     }
-    var retVal = results.data;
 
-    // Save our data to JSON as caching
-    fs.writeFile(cacheFilepath, JSON.stringify(retVal), 'utf8', function handleWriteFile (err) {
+    // Load our initial file
+    fs.readFile(filepath, 'utf8', function handleReadFile (err, csvStr) {
       // If there was an error, callback with it
       if (err) {
         return cb(err);
       }
 
-      // Callback with our value
-      cb(null, retVal);
+      // Parse our CSV result
+      // DEV: We trim loaded data to prevent empty lines being parsed
+      csvStr = csvStr.trim();
+      var results = Papa.parse(csvStr, {
+        header: true
+      });
+      if (results.errors.length) {
+        console.error('Error encountered', results.errors[0]);
+        return cb(new Error(results.errors[0].message));
+      }
+      var retVal = results.data;
+
+      // Save our data to JSON as caching
+      fs.writeFile(cacheFilepath, JSON.stringify(retVal), 'utf8', function handleWriteFile (err) {
+        // If there was an error, callback with it
+        if (err) {
+          return cb(err);
+        }
+
+        // Callback with our value
+        cb(null, retVal);
+      });
     });
   });
 }
