@@ -165,12 +165,10 @@ function buildTrips(cb) {
 // Define our main function
 function stringifyArr(ProtobufClass, arr) {
   // ["protobuf-data", "protobuf-data", ...]
-  return '[' +
-    arr.map(function serializeItem (item) {
-      var encodedStr = ProtobufClass.encode(item).finish().toString('utf8');
-      return '"' + jsStringEscape(encodedStr) + '"';
-    }).join(',') +
-  ']';
+  return arr.map(function serializeItem (item) {
+    var encodedStr = ProtobufClass.encode(item).finish().toString('utf8');
+    return encodedStr;
+  });
 }
 module.exports = function (cb) {
   async.parallel([
@@ -185,12 +183,12 @@ module.exports = function (cb) {
 
     // Otherwise, callback with a JSON-P string
     assert.strictEqual(results.length, 3);
-    cb(null, 'window.app.loadData({' +
+    cb(null, 'window.app.loadData(' + JSON.stringify({
       // stopTimes: ["protobuf-data", ...],
-      'stopTimes: ' + stringifyArr(ProtobufTypes.StopTime, results[0]) + ',' +
-      'stops: ' + stringifyArr(ProtobufTypes.Stop, results[1]) + ',' +
-      'trips: ' + stringifyArr(ProtobufTypes.Trip, results[2]) +
-    '})');
+      stopTimes: stringifyArr(ProtobufTypes.StopTime, results[0]),
+      stops: stringifyArr(ProtobufTypes.Stop, results[1]),
+      trips: stringifyArr(ProtobufTypes.Trip, results[2])
+    }) + ')');
   });
 };
 
