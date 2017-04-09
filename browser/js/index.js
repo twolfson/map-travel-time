@@ -4,6 +4,7 @@ var assert = require('assert');
 var escapeHtml = require('escape-html');
 var Papa = require('papaparse');
 var L = require('leaflet');
+var StopTime = require('./proto-types').StopTime;
 
 // Define a parser helper
 function parseCsvStr(consoleLabel, csvStr) {
