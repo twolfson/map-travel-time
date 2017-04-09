@@ -83,9 +83,10 @@ function Application(params) {
 Application.prototype = {
   loadData: function (params) {
     // Parse our CSV info
-    var stopInfoArr = parseCsvStr('Parsing stops', params.csvStopsStr);
-    // var stopTimesInfoArr = parseCsvStr('Parsing stop times', params.csvStopTimesStr);
-    // var tripInfoArr = parseCsvStr('Parsing trips', params.csvTripsStr);
+    var stopTimes = params.stopTimes; assert(stopTimes);
+    var stops = params.stops; assert(stops);
+    var trips = params.trips; assert(trips);
+    var stopInfoArr = stops;
 
     // Slice our stop data for development
     // TODO: Remove dev edit
