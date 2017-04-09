@@ -90,7 +90,8 @@ gulp.task('build-css', function buildCss () {
 // https://github.com/substack/watchify/tree/v3.7.0#watchifyb-opts
 exports.browserifyOptions = {
   cache: {}, packageCache: {},
-  debug: true // Enable source maps
+  debug: true, // Enable source maps
+  transform: ['brfs']
 };
 var browserifyObj = browserify(_.defaults({
   entries: __dirname + '/browser/js/index.js'

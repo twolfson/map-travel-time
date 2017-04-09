@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "async": "~2.3.0",
+    "brfs": "~1.4.3",
     "browserify": "~14.1.0",
     "foundry": "~4.3.2",
     "foundry-release-git": "~2.0.2",
