@@ -136,6 +136,7 @@ function buildStopTimes(cb) {
           var timeToNextStop = nextArrivalTime - currentDepartureTime;
 
           // Generate and return our data
+          // {stop_id: '1234', time_to_next_stop: 45}
           var retObj = _.pick(stopTime, VALID_KEYS);
           assert.deepEqual(Object.keys(retObj), VALID_KEYS);
           retObj.time_to_next_stop = timeToNextStop;
