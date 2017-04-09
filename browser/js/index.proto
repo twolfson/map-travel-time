@@ -11,3 +11,26 @@ message StopTime {
   uint32 first_arrival_time = 2;
   repeated StopTimeDiff stop_time_diffs = 3;
 }
+
+// TODO: Optimize our structure (e.g. proper types, removing unused data)
+message Stop {
+  string stop_id = 1;
+  string stop_code = 2;
+  string stop_name = 3;
+  string stop_desc = 4;
+  string stop_lat = 5;
+  string stop_lon = 6;
+  string zone_id = 7;
+  string stop_url = 8;
+}
+
+// TODO: Optimize our structure (e.g. proper types, removing unused data)
+message Trip {
+  string route_id = 1;
+  string service_id = 2;
+  string trip_id = 3;
+  string trip_headsign = 4;
+  string direction_id = 5;
+  string block_id = 6;
+  string shape_id = 7;
+}
