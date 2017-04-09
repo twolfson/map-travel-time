@@ -19,5 +19,6 @@ html
       window.console.time('JSON-P loading');
     script(src="/js/json-p.js")
     script.
-      //- 2847.49ms total
+      //- With protobuf: 2600-3000ms total without even parsing stop times
+      //- With flat array: it's 2000 on average with occasional 3600
       window.console.timeEnd('JSON-P loading');
