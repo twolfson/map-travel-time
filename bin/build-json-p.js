@@ -68,6 +68,11 @@ function buildStopTimes(cb) {
     }
 
     // Group our trip datas by their id
+    // [{trip_id: '7342058', arrival_time: '26:04:21', departure_time: '26:04:21',
+    //   stop_id: '6316', stop_sequence: '8', stop_headsign: ' ', pickup_type: ' ',
+    //   drop_off_type: ' ', shape_dist_traveled: ' '}
+    // ->
+    // {7342058/*trip_id*/: [{trip_id: '7342058', ...}, ...]
     logger.info('File loaded "' + filepath + '"');
     var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime) {
       return stopTime.trip_id;
