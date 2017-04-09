@@ -89,7 +89,9 @@ Application.prototype = {
 
     // Parse our parameters via Protobuf
     // stopTimes = parseProtobufTypeArr('Parsing stop times', ProtobufTypes.StopTime, stopTimes);
+    // DEV: We are seeing 300ms parsing time although this doesn't have insight into JSON-P comprehension
     stops = parseProtobufTypeArr('Parsing stops', ProtobufTypes.Stop, stops);
+    // DEV: We are seeing 1000ms parsing time although this doesn't have insight into JSON-P comprehension
     trips = parseProtobufTypeArr('Parsing trips', ProtobufTypes.Trip, trips);
     var stopInfoArr = stops;
 
