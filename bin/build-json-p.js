@@ -3,8 +3,9 @@ var _ = require('underscore');
 var assert = require('assert');
 var fs = require('fs');
 var async = require('async');
+var jsStringEscape = require('js-string-escape');
 var Papa = require('papaparse');
-var StopTimes = require('../browser/js/proto-types').StopTimes;
+var StopTime = require('../browser/js/proto-types').StopTime;
 var logger = console;
 
 // Define our helpers
@@ -174,9 +175,12 @@ module.exports = function (cb) {
     // assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData({' +
       // TODO: Escape JS string since we are no longer using JSON
-      'stopTimes: "' + StopTimes.encode({
-        stop_times: results[0]
-      }).finish().toString('utf8') + '"' +
+      'stopTimes: [' +
+        results[0].map(function serializeStopTime (stopTime) {
+          var encodedStr = StopTime.encode(stopTime).finish().toString('utf8');
+          return '"' + jsStringEscape(encodedStr) + '"';
+        }).join(',') +
+      '],' +
       // stops: results[1],
       // trips: results[2]
     '})');
