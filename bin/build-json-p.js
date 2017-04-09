@@ -58,15 +58,16 @@ function readVendorFile(filepath, cb) {
 // Define our main function
 module.exports = function (cb) {
   // Load in our stop data
-  logger.info('Loading file...');
-  readVendorFile(__dirname + '/../vendor/sfmta-60/stop_times.txt', function handleReadVendorFile (err, stopTimes) {
+  var filepath = __dirname + '/../vendor/sfmta-60/stop_times.txt';
+  logger.info('Loading file "' + filepath + '"...');
+  readVendorFile(filepath, function handleReadVendorFile (err, stopTimes) {
     // If there was an error, callback with it
     if (err) {
       return cb(err);
     }
 
     // Group our trip datas by their id
-    logger.info('File loaded');
+    logger.info('File loaded "' + filepath + '"');
     var stopTimesMapByTripId = _.groupBy(stopTimes, function groupByTripId (stopTime) {
       return stopTime.trip_id;
     });

@@ -13,6 +13,7 @@ var gulpSizereport = require('gulp-sizereport');
 var rimraf = require('rimraf');
 var vinylSourceStream = require('vinyl-source-stream');
 var watchify = require('watchify');
+var buildJsonP = require('./bin/build-json-p');
 
 // Set up our configuration
 var config = {
@@ -26,11 +27,7 @@ gulp.task('build-clean', function clean (done) {
   rimraf(__dirname + '/dist', done);
 });
 
-gulp.task('build-json-p', function buildJsonP (cb) {
-
-});
-
-gulp.task('build-html', ['build-json-p'], function buildHtml () {
+gulp.task('build-html', function buildHtml () {
   // Generate a stream that compiles our Pug as CSS
   // DEV: We return the pipe'd stream so gulp knows when we exit
   var htmlStream = gulp.src('browser/index.pug')
@@ -131,7 +128,41 @@ gulp.task('build-js', function buildJs () {
     .pipe(gulpLivereload());
 });
 
-gulp.task('build', ['build-html', 'build-css', 'build-js']);
+gulp.task('build-json-p', function buildJsonPFn () {
+  // Generate our stream to write to and return
+  var jsonPStream = vinylSourceStream('json-p.js');
+
+  // Build our JSON-P and pass it to the stream
+  buildJsonP(function handleBuildJsonP (err, jsonP) {
+    if (err) {
+      jsonPStream.emit('error', err);
+    } else {
+      jsonPStream.write(jsonP);
+    }
+  });
+
+  // If we are allowing failures, then log them
+  // DEV: Desktop notifications are a personal preference
+  //   If they get unwieldy, feel free to move to logging only
+  //   But be sure to continue to emit an `end` event
+  if (config.allowFailures) {
+    jsonPStream.on('error', gulpNotify.onError());
+  }
+
+  // If we are minifying assets, then minify them
+  if (config.minifyAssets) {
+    jsonPStream = jsonPStream
+      .pipe(gulpUglify())
+      .pipe(gulpSizereport({gzip: true}));
+  }
+
+  // Return our stream
+  return jsonPStream
+    .pipe(gulp.dest('dist/js'))
+    .pipe(gulpLivereload());
+});
+
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-json-p']);
 
 // Define our development tasks
 gulp.task('livereload-update', function livereloadUpdate () {
@@ -160,4 +191,5 @@ gulp.task('develop', ['build'], function develop () {
   gulp.watch('browser/*.pug', ['build-html']);
   gulp.watch('browser/css/**/*.css', ['build-css']);
   gulp.watch('server/**/*', ['livereload-update']);
+  gulp.watch('vendor/**/*', ['build-json-p']);
 });
