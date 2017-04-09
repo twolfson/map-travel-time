@@ -2,6 +2,7 @@
 var _ = require('underscore');
 var assert = require('assert');
 var fs = require('fs');
+var async = require('async');
 var Papa = require('papaparse');
 var logger = console;
 
@@ -55,9 +56,9 @@ function readVendorFile(filepath, cb) {
   });
 }
 
-// Define our main function
-module.exports = function (cb) {
-  // Load in our stop data
+// Define our builder functions
+function buildStopTimes(cb) {
+  // Load in our stop times data
   var filepath = __dirname + '/../vendor/sfmta-60/stop_times.txt';
   logger.info('Loading file "' + filepath + '"...');
   readVendorFile(filepath, function handleReadVendorFile (err, stopTimes) {
@@ -133,9 +134,38 @@ module.exports = function (cb) {
     });
 
     // Callback with our data
-    cb(null, 'window.app.loadData(' + JSON.stringify(retArr) + ')');
+    cb(null, retArr);
   });
-};
+}
+
+function buildStops(cb) {
+  var filepath = __dirname + '/../vendor/sfmta-60/stops.txt';
+  readVendorFile(filepath, cb);
+}
+
+function buildTrips(cb) {
+  var filepath = __dirname + '/../vendor/sfmta-60/trips.txt';
+  readVendorFile(filepath, cb);
+}
+
+// Define our main function
+module.exports = function (cb) {
+  async.parallel([
+    buildStopTimes,
+    buildStops,
+    buildTrips
+  ], function handleResults (err, results) {
+    // If there was an error, callback with it
+
+    // Otherwise, callback with a JSON-P string
+    assert.strictEqual(results.length, 3);
+    cb(null, 'window.app.loadData(' + JSON.stringify({
+      stopTimes: results[0],
+      stops: results[1],
+      trips: results[2]
+    }) + ')');
+  });
+}
 
 // If we are running our script directly, output to `stdout`
 // DEV: 170kb gzipped with only stop ids bound to trip id
