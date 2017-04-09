@@ -2,22 +2,17 @@
 // Based on http://leafletjs.com/examples/quick-start/
 var assert = require('assert');
 var escapeHtml = require('escape-html');
-var Papa = require('papaparse');
 var L = require('leaflet');
-var StopTime = require('./proto-types').StopTime;
+var ProtobufTypes = require('./protobuf-types').ProtobufTypes;
 
 // Define a parser helper
-function parseCsvStr(consoleLabel, csvStr) {
+function parseProtobufTypeArr(consoleLabel, protobufClass, protobufStrArr) {
   console.time(consoleLabel);
-  var results = Papa.parse(csvStr, {
-    header: true
+  var retArr = protobufStrArr.map(function decodeProtobufStr (protobufStr) {
+
   });
   console.timeEnd(consoleLabel);
-  if (results.errors.length) {
-    console.error('Error encountered', results.errors[0]);
-    throw new Error(results.errors[0].message);
-  }
-  return results.data;
+  return retArr;
 }
 
 // Define our Application constructor
@@ -92,6 +87,7 @@ Application.prototype = {
     // Slice our stop data for development
     // TODO: Remove dev edit
     // stopInfoArr = stopInfoArr.slice(0, 10);
+    console.log(params);
 
     // Recenter our map
     this.map.panTo([stopInfoArr[0].stop_lat, stopInfoArr[0].stop_lon]);

@@ -5,7 +5,7 @@ var fs = require('fs');
 var async = require('async');
 var jsStringEscape = require('js-string-escape');
 var Papa = require('papaparse');
-var ProtoTypes = require('../browser/js/proto-types');
+var ProtobufTypes = require('../browser/js/protobuf-types');
 var logger = console;
 
 // Define our helpers
@@ -163,11 +163,11 @@ function buildTrips(cb) {
 }
 
 // Define our main function
-function stringifyArr(ProtoClass, arr) {
+function stringifyArr(ProtobufClass, arr) {
   // ["protobuf-data", "protobuf-data", ...]
   return '[' +
     arr.map(function serializeItem (item) {
-      var encodedStr = ProtoClass.encode(item).finish().toString('utf8');
+      var encodedStr = ProtobufClass.encode(item).finish().toString('utf8');
       return '"' + jsStringEscape(encodedStr) + '"';
     }).join(',') +
   ']';
@@ -187,9 +187,9 @@ module.exports = function (cb) {
     assert.strictEqual(results.length, 3);
     cb(null, 'window.app.loadData({' +
       // stopTimes: ["protobuf-data", ...],
-      'stopTimes: ' + stringifyArr(ProtoTypes.StopTime, results[0]) + ',' +
-      'stops: ' + stringifyArr(ProtoTypes.Stop, results[1]) + ',' +
-      'trips: ' + stringifyArr(ProtoTypes.Trip, results[2]) +
+      'stopTimes: ' + stringifyArr(ProtobufTypes.StopTime, results[0]) + ',' +
+      'stops: ' + stringifyArr(ProtobufTypes.Stop, results[1]) + ',' +
+      'trips: ' + stringifyArr(ProtobufTypes.Trip, results[2]) +
     '})');
   });
 };
