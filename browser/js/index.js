@@ -10,7 +10,7 @@ function parseProtobufTypeArr(consoleLabel, protobufClass, protobufStrArr) {
   console.time(consoleLabel);
   var retArr = protobufStrArr.map(function decodeProtobufStr (protobufStr) {
     console.log('uhhh wat', protobufStr, protobufClass);
-    return protobufClass.decode(protobufStr);
+    return protobufClass.toObject(protobufStr);
   });
   console.timeEnd(consoleLabel);
   return retArr;
