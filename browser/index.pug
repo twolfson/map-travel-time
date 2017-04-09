@@ -15,4 +15,9 @@ html
       });
 
     //- Load our GTFS data via JSON-P
+    script.
+      window.console.time('JSON-P loading');
     script(src="/js/json-p.js")
+    script.
+      //- 2847.49ms total
+      window.console.timeEnd('JSON-P loading');
