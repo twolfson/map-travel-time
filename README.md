@@ -4,6 +4,8 @@ Map that projects travel times from a point
 
 TODO: Generate .js instead of JSON
 
+TODO: Reduce parse size by chunking trips into date/time parts (e.g. M-F chunk, Saturday chunk)
+
 Based on [Mapnificent][], cloned due to lack of maintenance, documentation, and desire for better travel time visibility
 
 [Mapnificent]: https://github.com/mapnificent/mapnificent
